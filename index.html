@@ -13,42 +13,174 @@
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: 80px; 
     }
 
     body {
-      background-color: #0d1117;
       font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      color: #e6edf5;
+      background-color: #fef9f0;  
+      color: #2e2b28;
       line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
     }
+
+    body.no-scroll {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ===== 2. LIVE BACKGROUND ANIMATION (Particles) ===== */
+    .background-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      pointer-events: none;
+    }
+
+    .background-particles li {
+      position: absolute;
+      display: block;
+      list-style: none;
+      width: 20px;
+      height: 20px;
+      background: rgba(224, 122, 57, 0.1); /* Soft accent color */
+      animation: floatUp 25s linear infinite;
+      bottom: -150px;
+      border-radius: 4px;
+    }
+
+    .background-particles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+    .background-particles li:nth-child(2) { left: 10%; width: 30px; height: 30px; animation-delay: 2s; animation-duration: 12s; }
+    .background-particles li:nth-child(3) { left: 70%; width: 40px; height: 40px; animation-delay: 4s; }
+    .background-particles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+    .background-particles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+    .background-particles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+    .background-particles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+    .background-particles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+    .background-particles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+    .background-particles li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 10%; }
+      100% { transform: translateY(-1200px) rotate(720deg); opacity: 0; border-radius: 50%; }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.03) 0%, transparent 30%),
+                  radial-gradient(circle at 80% 70%, rgba(249, 115, 22, 0.04) 0%, transparent 35%);
+      z-index: -3;
+      pointer-events: none;
+    }
+
+    :root {
+      --accent: #e07a39;        
+      --accent-glow: 0 8px 25px #e07a3940;
+      --card-bg: rgba(255, 250, 240, 0.8);
+      --nav-bg: rgba(255, 250, 240, 0.85);
+      --intro-dark: rgba(249, 231, 195, 0.97); /* Dark bg for video-like contrast */
+    }
+
+    /* ===== 1. INTRO ANIMATION (Letter by Letter + Block Fall) ===== */
+    #intro-container {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+    }
+
+    .intro-block {
+      flex: 1;
+      background-color: var(--intro-dark);
+      transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+      will-change: transform;
+    }
+
+    .intro-block.slide-down {
+      transform: translateY(100%);
+    }
+
+    .intro-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      transition: opacity 0.5s ease;
+    }
+
+    .intro-content.fade-out {
+      opacity: 0;
+    }
+
+    .letter-wrap {
+      overflow: hidden;
+      display: inline-block;
+      margin: 0 2px;
+    }
+
+    .letter {
+      display: inline-block;
+      font-size: clamp(2rem, 7vw, 7rem);
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      transform: translateY(100%);
+      will-change: transform;
+      animation: slideUpLetter 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    }
+
+    /* Staggered delays for letters */
+    .letter:nth-child(1) { animation-delay: 0.1s; }
+    .letter:nth-child(2) { animation-delay: 0.18s; }
+    .letter:nth-child(3) { animation-delay: 0.26s; }
+    .letter:nth-child(4) { animation-delay: 0.34s; }
+    .letter:nth-child(5) { animation-delay: 0.42s; }
+    .letter:nth-child(6) { animation-delay: 0.50s; }
+    .letter:nth-child(7) { animation-delay: 0.58s; }
+    .letter:nth-child(8) { animation-delay: 0.66s; }
+    .letter:nth-child(9) { animation-delay: 0.74s; }
+    .letter:nth-child(10) { animation-delay: 0.82s; }
+
+    @keyframes slideUpLetter {
+      to { transform: translateY(0); }
+    }
+    /* ======================================================= */
 
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 2rem 2rem;
+      position: relative;
+      z-index: 2;
     }
 
-    /* ----- REDDISH ACCENT & GLOW ----- */
-    :root {
-      --accent: #f97316;      /* warm orange-red */
-      --accent-glow: 0 0 20px #f9731680;
-      --accent-soft: #f973161a;
-      --border-dim: #2d3748;
-    }
-
-    /* ----- STICKY NAVIGATION ----- */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background: rgba(13, 17, 23, 0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 2px solid var(--accent);
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+      border-bottom: 1px solid #ffd7b3;
     }
 
     .logo {
@@ -64,7 +196,7 @@
     }
 
     .nav-links a {
-      color: #e2e8f0;
+      color: #4a3f35;
       text-decoration: none;
       font-weight: 500;
       font-size: 1.1rem;
@@ -78,13 +210,12 @@
       border-bottom-color: var(--accent);
     }
 
-    /* ----- TYPOGRAPHY ----- */
     h1 {
       font-size: 4.2rem;
       font-weight: 700;
       letter-spacing: -0.03em;
       line-height: 1.1;
-      background: linear-gradient(145deg, #ffffff, #ffcba4);
+      background: linear-gradient(145deg, #4d3a28, #b45f2a);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -94,14 +225,14 @@
     .hello {
       font-size: 1.8rem;
       font-weight: 400;
-      color: #bdd3ff;
+      color: #9b6f4f;
       margin-bottom: 0.25rem;
     }
 
     .hero-title {
       font-size: 2rem;
       font-weight: 600;
-      color: #f0b37b;
+      color: #bd702c;
       margin-bottom: 2rem;
       border-left: 6px solid var(--accent);
       padding-left: 1.2rem;
@@ -110,14 +241,13 @@
     h2 {
       font-size: 2.4rem;
       font-weight: 600;
-      color: #fcd5b5;
+      color: #4d3824;
       margin-bottom: 2rem;
       border-bottom: 3px solid var(--accent);
       display: inline-block;
       padding-bottom: 0.3rem;
     }
 
-    /* ----- HERO (TWO COLUMNS) ----- */
     .hero {
       display: flex;
       flex-wrap: wrap;
@@ -137,46 +267,60 @@
       justify-content: center;
     }
 
-    /* LARGER PHOTO WITH RED GLOW */
+    /* ===== 4. NEW ANIMATION: Floating Profile Photo ===== */
     .profile-photo {
       width: 500px;
       height: 550px;
       border-radius: 50%;
       object-fit: cover;
       border: 4px solid var(--accent);
-      box-shadow: 0 0 35px 12px #f9731680, 0 25px 50px -10px black;
-      transition: transform 0.3s ease, box-shadow 0.3s;
-      background: #2d3748;
+      box-shadow: 0 20px 35px -8px #b95b1e, 0 0 0 2px #fff8f0 inset;
+      background: #f5e1d0;
+      animation: gentleFloat 6s ease-in-out infinite; /* Added floating */
+      transition: box-shadow 0.4s;
+    }
+
+    @keyframes gentleFloat {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
     }
 
     .profile-photo:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 50px 18px #f97316cc, 0 30px 60px -10px black;
+      animation-play-state: paused; /* Pause float on hover */
+      box-shadow: 0 30px 45px -10px #b45f2a, 0 0 0 4px #fceae0 inset;
     }
 
-    /* RESUME BUTTON (prominent) */
+    /* ===== 4. NEW ANIMATION: Pulsing Glow on Resume Button ===== */
     .resume-btn {
       display: inline-block;
       background: var(--accent);
-      color: black;
+      color: #2d2a24;
       font-weight: 700;
       font-size: 1.3rem;
       padding: 0.9rem 2.8rem;
       border-radius: 60px;
       text-decoration: none;
-      box-shadow: 0 10px 25px -5px #f97316;
+      box-shadow: 0 0 0 0 rgba(224, 122, 57, 0.7);
       margin: 1.5rem 0 2rem;
-      border: 2px solid var(--accent);
-      transition: 0.2s;
+      border: none;
+      transition: 0.25s ease;
+      animation: pulseGlow 2s infinite; /* Added pulse */
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(224, 122, 57, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 15px rgba(224, 122, 57, 0); }
+      100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(224, 122, 57, 0); }
     }
 
     .resume-btn:hover {
-      background: #ff8c42;
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px -5px #f97316;
+      background: #cf6825;
+      animation: none; /* stop pulse on hover */
+      transform: translateY(-5px) scale(1.05);
+      color: #1f1b16;
     }
 
-    /* service list */
     .service-list {
       margin: 2rem 0 1rem;
       display: flex;
@@ -189,7 +333,7 @@
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      color: #e2e8f0;
+      color: #4e3f32;
     }
 
     .service-item::before {
@@ -199,47 +343,48 @@
       line-height: 1;
     }
 
-    /* about section (expanded, stats removed) */
     .about-section {
-      background: #161f2e;
+      background: #fffcf5;
       border-radius: 48px;
       padding: 2.5rem;
       margin: 4rem 0;
-      border: 1px solid #f9731630;
-      box-shadow: 0 20px 40px -20px black;
+      border: 1px solid #ffd9b9;
+      box-shadow: 0 30px 40px -30px #d29b6e, 0 8px 18px -8px #ecd7c0 inset;
+      backdrop-filter: blur(4px);
     }
 
     .about-text {
       font-size: 1.25rem;
-      color: #cfdfee;
+      color: #4e4238;
       max-width: 1000px;
       margin-bottom: 1.5rem;
     }
 
-    /* training section card (similar to cert) */
     .training-card {
-      background: #1e2a3a;
+      background: #fffaf2;
       border-radius: 28px;
       padding: 2rem;
-      border: 1px solid #f9731650;
+      border: 1px solid #fbc99d;
       margin: 2rem 0 3rem;
-      transition: 0.2s;
+      transition: 0.25s;
+      box-shadow: 0 20px 25px -20px #ab6f41;
     }
 
     .training-card:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 25px #f9731640;
+      box-shadow: 0 30px 35px -22px #b45f2a, 0 0 0 3px #fff2e0 inset;
+      transform: translateY(-6px);
     }
 
     .training-title {
       font-size: 1.8rem;
       font-weight: 600;
-      color: #fdba74;
+      color: #985f2c;
       margin-bottom: 0.75rem;
     }
 
     .training-meta {
-      color: #a0b9d9;
+      color: #735f4c;
       font-size: 1rem;
       margin-bottom: 1.5rem;
       display: flex;
@@ -248,7 +393,7 @@
     }
 
     .training-desc {
-      color: #c4d3e8;
+      color: #4a4036;
       margin-bottom: 1.5rem;
       font-size: 1.1rem;
     }
@@ -261,20 +406,20 @@
     }
 
     .tech-badge {
-      background: #1f3247;
-      color: #fcd5b5;
+      background: #fff0de;
+      color: #7b4a26;
       padding: 0.4rem 1.2rem;
       border-radius: 30px;
       font-size: 0.9rem;
       font-weight: 600;
-      border: 1px solid #f9731650;
+      border: 1px solid #fdb47b;
     }
 
     .training-btn {
       display: inline-block;
       background: transparent;
       border: 2px solid var(--accent);
-      color: white;
+      color: #4d321e;
       padding: 0.7rem 2rem;
       border-radius: 40px;
       font-weight: 600;
@@ -284,10 +429,11 @@
 
     .training-btn:hover {
       background: var(--accent);
-      color: black;
+      color: #2d241c;
+      border-color: var(--accent);
+      box-shadow: 0 10px 16px -6px #b45a1e;
     }
 
-    /* projects grid */
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -296,28 +442,30 @@
     }
 
     .project-card {
-      background: #1a2533;
+      background: #fffbf5;
       border-radius: 32px;
-      border: 1px solid #f9731640;
+      border: 1px solid #fbc89a;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.35s cubic-bezier(0.15, 0.8, 0.3, 1);
       display: flex;
       flex-direction: column;
+      box-shadow: 0 18px 25px -20px #9f6b41;
+      backdrop-filter: blur(2px);
     }
 
     .project-card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-12px) scale(1.01);
       border-color: var(--accent);
-      box-shadow: 0 25px 40px -15px #f9731680;
+      box-shadow: 0 30px 40px -18px #b85f24, 0 0 0 3px #ffefde inset;
     }
 
     .project-image {
       height: 200px;
-      background: #2d3f54;
+      background: #fbebdb;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #f0b37b;
+      color: #d17d3a;
       font-size: 4rem;
       border-bottom: 3px solid var(--accent);
       transition: 0.2s;
@@ -338,7 +486,7 @@
     .project-title {
       font-size: 1.9rem;
       font-weight: 600;
-      color: #fdba74;
+      color: #9e5f2c;
       margin-bottom: 1rem;
     }
 
@@ -350,17 +498,17 @@
     }
 
     .tech-tag {
-      background: #1f3247;
-      color: #fcd5b5;
+      background: #fbebdb;
+      color: #714b2b;
       padding: 0.3rem 1.2rem;
       border-radius: 30px;
       font-size: 0.85rem;
       font-weight: 600;
-      border: 1px solid #f9731650;
+      border: 1px solid #fdb072;
     }
 
     .project-desc {
-      color: #c4d3e8;
+      color: #4f4136;
       margin-bottom: 2rem;
       line-height: 1.6;
     }
@@ -374,7 +522,7 @@
     .btn-sm {
       background: transparent;
       border: 2px solid var(--accent);
-      color: white;
+      color: #5c412b;
       padding: 0.6rem 1.5rem;
       border-radius: 40px;
       font-weight: 600;
@@ -385,11 +533,12 @@
 
     .btn-sm:hover {
       background: var(--accent);
-      color: black;
-      transform: scale(1.02);
+      color: #23201b;
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 12px -8px #b45a1e;
     }
 
-    /* EDUCATION SECTION */
     .education-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -398,33 +547,35 @@
     }
 
     .edu-card {
-      background: #1e2a3a;
+      background: #fffcf5;
       border-radius: 28px;
       padding: 2rem;
-      border: 1px solid #f9731650;
-      transition: 0.2s;
+      border: 1px solid #fbc99d;
+      transition: 0.25s;
+      box-shadow: 0 16px 22px -18px #a56d42;
     }
 
     .edu-card:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 25px #f9731640;
+      box-shadow: 0 25px 30px -18px #b45a2a, 0 0 0 3px #fff1e2 inset;
+      transform: translateY(-6px);
     }
 
     .edu-degree {
       font-size: 1.5rem;
       font-weight: 600;
-      color: #fdba74;
+      color: #9e5f2c;
       margin-bottom: 0.5rem;
     }
 
     .edu-institution {
       font-size: 1.2rem;
-      color: #a0b9d9;
+      color: #735f4f;
       margin-bottom: 0.5rem;
     }
 
     .edu-meta {
-      color: #94a9c9;
+      color: #7e6a58;
       font-size: 1rem;
       margin-bottom: 0.5rem;
       display: flex;
@@ -433,12 +584,11 @@
     }
 
     .edu-score {
-      color: #f0b37b;
+      color: #b3682b;
       font-weight: 600;
       font-size: 1.1rem;
     }
 
-    /* CERTIFICATES & ACHIEVEMENTS SECTIONS */
     .cert-grid, .achievement-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -447,27 +597,27 @@
     }
 
     .cert-card {
-      background: #1e2a3a;
+      background: #fffcf5;
       border-radius: 28px;
       padding: 1.8rem;
-      border: 1px solid #f9731650;
+      border: 1px solid #fbc99d;
       transition: 0.2s;
     }
 
     .cert-card:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 20px #f9731640;
+      box-shadow: 0 18px 26px -16px #b45a1e, 0 0 0 3px #ffeede inset;
     }
 
     .cert-title {
       font-size: 1.4rem;
       font-weight: 600;
-      color: #fdba74;
+      color: #9e5f2c;
       margin-bottom: 0.5rem;
     }
 
     .cert-meta {
-      color: #a0b9d9;
+      color: #735f4c;
       font-size: 0.95rem;
       margin-bottom: 1rem;
     }
@@ -486,19 +636,24 @@
 
     .cert-link:hover {
       background: var(--accent);
-      color: black;
+      color: #2b241e;
     }
 
     .achievement-item {
-      background: #1e2a3a;
+      background: #fffcf5;
       border-radius: 28px;
       padding: 1.8rem;
-      border: 1px solid #f9731650;
+      border: 1px solid #fbc99d;
+      transition: 0.2s;
+    }
+    .achievement-item:hover {
+      border-color: var(--accent);
+      box-shadow: 0 18px 26px -16px #b45a1e;
     }
 
     .achievement-item p {
       font-size: 1.2rem;
-      color: #d0e0ff;
+      color: #53473c;
     }
 
     .achievement-item a {
@@ -507,13 +662,12 @@
       font-weight: 600;
     }
 
-    /* COMPACT CONTACT BOX */
     .contact-box {
-      background: #1a2535;
+      background: #fff8ef;
       border-radius: 48px;
       padding: 2rem 2.5rem;
       border: 2px solid var(--accent);
-      box-shadow: 0 0 25px #f9731640;
+      box-shadow: 0 20px 30px -18px #c07438, 0 0 0 3px #fffcf5 inset;
       max-width: 600px;
       margin: 3rem auto;
       text-align: center;
@@ -521,7 +675,7 @@
 
     .contact-box h3 {
       font-size: 2rem;
-      color: #fdba74;
+      color: #7b542f;
       margin-bottom: 1.5rem;
     }
 
@@ -536,30 +690,60 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #e2e8f0;
+      color: #3f332b;
       text-decoration: none;
       font-size: 1.3rem;
       font-weight: 500;
       transition: 0.2s;
-      border: 1px solid #f9731650;
+      border: 1px solid #fdb072;
       padding: 0.5rem 1.5rem;
       border-radius: 60px;
+      background: #fffaf3;
     }
 
     .contact-link:hover {
       background: var(--accent);
-      color: black;
+      color: #23201b;
       border-color: var(--accent);
-      transform: translateY(-4px);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 12px 18px -10px #b45a1e;
     }
 
     .footer-note {
       text-align: center;
       padding: 2rem 0 1rem;
-      color: #7f9bc0;
+      color: #8b725b;
+      font-weight: 400;
+      letter-spacing: 0.3px;
     }
 
-    /* responsive */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(50px) scale(0.98);
+      transition: opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .reveal-item.revealed {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    #home .hero {
+      opacity: 1;
+      transform: none;
+    }
+
+    .about-section,
+    .training-card,
+    .project-card,
+    .edu-card,
+    .cert-card,
+    .achievement-item,
+    .contact-box,
+    h2 {  
+      will-change: transform, opacity;
+    }
+
     @media (max-width: 800px) {
       h1 { font-size: 3rem; }
       .hero { flex-direction: column; }
@@ -567,19 +751,56 @@
       nav { flex-direction: column; gap: 0.5rem; }
       .nav-links { gap: 1rem; flex-wrap: wrap; justify-content: center; }
     }
+
+    * {
+      transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+
+    ::selection {
+      background: #fbc194;
+      color: #2b241e;
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-  <!-- STICKY NAVIGATION (always visible) -->
+<body class="no-scroll">
+  
+  <ul class="background-particles">
+    <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
+  </ul>
+
+  <div id="intro-container">
+    <div class="intro-block"></div>
+    <div class="intro-block"></div>
+    <div class="intro-block"></div>
+    <div class="intro-block"></div>
+    <div class="intro-block"></div>
+    <div class="intro-block"></div>
+    <div class="intro-block"></div>
+    <div class="intro-block"></div>
+    
+    <div class="intro-content">
+      <div class="letter-wrap"><span class="letter">H</span></div>
+      <div class="letter-wrap"><span class="letter">A</span></div>
+      <div class="letter-wrap"><span class="letter">R</span></div>
+      <div class="letter-wrap"><span class="letter">M</span></div>
+      <div class="letter-wrap"><span class="letter">A</span></div>
+      <div class="letter-wrap"><span class="letter">N</span></div>
+      <div class="letter-wrap"><span class="letter">D</span></div>
+      <div class="letter-wrap"><span class="letter">E</span></div>
+      <div class="letter-wrap"><span class="letter">E</span></div>
+      <div class="letter-wrap"><span class="letter">P</span></div>
+    </div>
+  </div>
+
   <nav>
     <div class="logo">Portfolio</div>
     <div class="nav-links">
       <a href="#home">Home</a>
       <a href="#about">About</a>
-      <a href="#training">Training</a>
       <a href="#projects">Projects</a>
       <a href="#education">Education</a>
+      <a href="#training">Training</a>
       <a href="#certificates">Certificates</a>
       <a href="#achievements">Achievements</a>
       <a href="#contact">Contact</a>
@@ -587,15 +808,13 @@
   </nav>
 
   <div class="container">
-    <!-- HOME / HERO SECTION -->
     <section id="home" style="scroll-margin-top: 80px;">
       <div class="hero">
         <div class="hero-left">
           <div class="hello">Hello. I'm</div>
           <h1>Harmandeep Singh</h1>
           <div class="hero-title">Software Engineer</div>
-          <!-- RESUME BUTTON (before About) -->
-          <a href="CV.pdf" class="resume-btn" download>📄 Download Resume</a>
+          <a href="CV.pdf" target="_blank" class="resume-btn" download>📄 Download Resume</a>
 
           <div class="service-list">
             <div class="service-item">Penetration Testing</div>
@@ -607,35 +826,128 @@
         </div>
 
         <div class="hero-right">
-          <!-- LARGER PHOTO with reddish glow -->
           <img src="photo.jpg" 
                alt="Harmandeep Singh" 
                class="profile-photo"
-               onerror="this.onerror=null; this.src='https://via.placeholder.com/380x380/2d3748/f97316?text=H'">
+               onerror="this.onerror=null; this.src='https://via.placeholder.com/380x380/f5e1d0/e07a39?text=H'">
         </div>
       </div>
     </section>
 
-    <!-- ABOUT SECTION (expanded, stats removed) -->
     <section id="about" style="scroll-margin-top: 70px;">
-      <div class="about-section">
-        <h2>About me</h2>
-        <p class="about-text">
-          I'm a B.Tech CSE student at Lovely Professional University (CGPA 8.63) with a deep passion for software development and cybersecurity. My journey began with a curiosity for how things work under the hood — from building custom Linux tools to exploiting vulnerabilities in controlled environments. I love the process of creating from scratch, whether it's a full‑stack web app or a penetration testing script.
-        </p>
-        <p class="about-text">
-          Skilled in Java, Python, C++, JavaScript, and familiar with libraries like NumPy/Matplotlib. On the security side, I regularly use Metasploit, Nmap, Wireshark, and Shodan. I'm also experienced with Git, Render, and cloud platforms. I thrive on solving challenges — I've solved 200+ CTF questions on PicoCTF and participated in hackathons like Hackverse 2024.
-        </p>
-        <p class="about-text">
-          Currently, I'm exploring advanced exploit development and aim to contribute to open‑source security tools. I believe in continuous learning and building practical, robust solutions.
-        </p>
+      <div class="about-section reveal-item">
+        <h2 class="reveal-item">About me</h2>
+        <p class="about-text reveal-item">I'm a B.Tech CSE student at Lovely Professional University (CGPA 8.63) with a deep passion for software development and cybersecurity. My journey began with a curiosity for how things work under the hood — from building custom Linux tools to exploiting vulnerabilities in controlled environments. I love the process of creating from scratch, whether it's a full‑stack web app or a penetration testing script.</p>
+        <p class="about-text reveal-item">Skilled in Java, Python, C++, JavaScript, and familiar with libraries like NumPy/Matplotlib. On the security side, I regularly use Metasploit, Nmap, Wireshark, and Shodan. I'm also experienced with Git, Render, and cloud platforms. I thrive on solving challenges — I've solved 200+ CTF questions on PicoCTF and participated in hackathons like Hackverse 2024.</p>
+        <p class="about-text reveal-item">Currently, I'm exploring advanced exploit development and aim to contribute to open‑source security tools. I believe in continuous learning and building practical, robust solutions.</p>
       </div>
     </section>
 
-    <!-- TRAINING SECTION (from CV) -->
+    <section id="projects" style="scroll-margin-top: 70px;">
+      <h2 class="reveal-item">Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card reveal-item">
+          <div class="project-image">
+            <img src="netflix.png" alt="Netflix Phishing" onerror="this.src='https://via.placeholder.com/340x200/fbebdb/e07a39?text=Netflix'">
+          </div>
+          <div class="project-content">
+            <div class="project-title">Netflix Phishing Webpage</div>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Render</span>
+            </div>
+            <p class="project-desc">A demonstration phishing page with similar UI to Netflix for security testing, redirecting users after capture.</p>
+            <div class="project-buttons">
+              <a href="https://github.com/HarmandeepSinghDhillon/Netflix" target="_blank" class="btn-sm">View Github</a>
+              <a href="https://netflix-gf9e.onrender.com/" target="_blank" class="btn-sm">View Project</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-item">
+          <div class="project-image">⬇️</div>
+          <div class="project-content">
+            <div class="project-title">YouTube Downloader</div>
+            <div class="project-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">yt-dlp</span>
+              <span class="tech-tag">Render</span>
+            </div>
+            <p class="project-desc">Server application to download audio/video from YouTube efficiently.</p>
+            <div class="project-buttons">
+              <a href="#" class="btn-sm">View Github</a>
+              <a href="#" class="btn-sm">View Project</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-item">
+          <div class="project-image">
+            <img src="goal.png" alt="Goal Setting Assistant" onerror="this.src='https://via.placeholder.com/340x200/fbebdb/e07a39?text=Goal'">
+          </div>
+          <div class="project-content">
+            <div class="project-title">Goal Setting Assistant</div>
+            <div class="project-tech">
+              <span class="tech-tag">HTML</span>
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">Gemini API</span>
+              <span class="tech-tag">Render</span>
+            </div>
+            <p class="project-desc">Custom chatbot fine-tuned for goal setting with unique UI and advanced AI integration.</p>
+            <div class="project-buttons">
+              <a href="https://github.com/HarmandeepSinghDhillon/new-one-chatbot" target="_blank" class="btn-sm">View Github</a>
+              <a href="https://goal-setting-assistant.onrender.com/" target="_blank" class="btn-sm">View Project</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal-item">
+          <div class="project-image">💻</div>
+          <div class="project-content">
+            <div class="project-title">Custom Terminal</div>
+            <div class="project-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">PyPI</span>
+              <span class="tech-tag">OpenWeather API</span>
+            </div>
+            <p class="project-desc">Linux-style terminal wrapper with real-time weather, installable via pip.</p>
+            <div class="project-buttons">
+              <a href="#" class="btn-sm">View Github</a>
+              <a href="#" class="btn-sm">View Project</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" style="scroll-margin-top: 70px;">
+      <h2 class="reveal-item">Education</h2>
+      <div class="education-grid">
+        <div class="edu-card reveal-item">
+          <div class="edu-degree">Bachelor of Technology - Computer Science</div>
+          <div class="edu-institution">Lovely Professional University, Phagwara</div>
+          <div class="edu-meta">Since August 2023 · CGPA 8.63</div>
+        </div>
+        <div class="edu-card reveal-item">
+          <div class="edu-degree">Intermediate (Class XII)</div>
+          <div class="edu-institution">Army Public School, Ambala Cantt</div>
+          <div class="edu-meta">April 2021 - March 2023</div>
+          <div class="edu-score">Percentage: 92.3%</div>
+        </div>
+        <div class="edu-card reveal-item">
+          <div class="edu-degree">Matriculation (Class X)</div>
+          <div class="edu-institution">Army Public School, Chandimandir Cantt</div>
+          <div class="edu-meta">April 2019 - March 2021</div>
+          <div class="edu-score">Percentage: 93.4%</div>
+        </div>
+      </div>
+    </section>
+
     <section id="training" style="scroll-margin-top: 70px;">
-      <h2>Training</h2>
-      <div class="training-card">
+      <h2 class="reveal-item">Training</h2>
+      <div class="training-card reveal-item">
         <div class="training-title">Ethical Hacking</div>
         <div class="training-meta">
           <span>📅 June 2025 - July 2025</span>
@@ -659,122 +971,15 @@
       </div>
     </section>
 
-    <!-- PROJECTS SECTION (Netflix updated with image/links) -->
-    <section id="projects" style="scroll-margin-top: 70px;">
-      <h2>Projects</h2>
-      <div class="projects-grid">
-        <!-- Netflix Phishing (with custom image and links) -->
-        <div class="project-card">
-          <div class="project-image">
-            <img src="netflix.png" alt="Netflix Phishing" onerror="this.src='https://via.placeholder.com/340x200/2d3f54/f97316?text=Netflix'">
-          </div>
-          <div class="project-content">
-            <div class="project-title">Netflix Phishing Webpage</div>
-            <div class="project-tech">
-              <span class="tech-tag">HTML</span>
-              <span class="tech-tag">CSS</span>
-              <span class="tech-tag">JavaScript</span>
-              <span class="tech-tag">Render</span>
-            </div>
-            <p class="project-desc">A demonstration phishing page with similar UI to Netflix for security testing, redirecting users after capture.</p>
-            <div class="project-buttons">
-              <a href="https://github.com/HarmandeepSinghDhillon/Netflix" target="_blank" class="btn-sm">View Github</a>
-              <a href="https://netflix-gf9e.onrender.com/" target="_blank" class="btn-sm">View Project</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Goal Setting Assistant (placeholder image) -->
-        <div class="project-card">
-          <div class="project-image">🎯</div>
-          <div class="project-content">
-            <div class="project-title">Goal Setting Assistant</div>
-            <div class="project-tech">
-              <span class="tech-tag">HTML</span>
-              <span class="tech-tag">CSS</span>
-              <span class="tech-tag">Gemini API</span>
-              <span class="tech-tag">Render</span>
-            </div>
-            <p class="project-desc">Custom chatbot fine-tuned for goal setting with unique UI and advanced AI integration.</p>
-            <div class="project-buttons">
-              <a href="#" class="btn-sm">View Github</a>
-              <a href="#" class="btn-sm">View Project</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- YouTube Downloader -->
-        <div class="project-card">
-          <div class="project-image">⬇️</div>
-          <div class="project-content">
-            <div class="project-title">YouTube Downloader</div>
-            <div class="project-tech">
-              <span class="tech-tag">Python</span>
-              <span class="tech-tag">yt-dlp</span>
-              <span class="tech-tag">Render</span>
-            </div>
-            <p class="project-desc">Server application to download audio/video from YouTube efficiently.</p>
-            <div class="project-buttons">
-              <a href="#" class="btn-sm">View Github</a>
-              <a href="#" class="btn-sm">View Project</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Custom Terminal -->
-        <div class="project-card">
-          <div class="project-image">💻</div>
-          <div class="project-content">
-            <div class="project-title">Custom Terminal</div>
-            <div class="project-tech">
-              <span class="tech-tag">Python</span>
-              <span class="tech-tag">PyPI</span>
-              <span class="tech-tag">OpenWeather API</span>
-            </div>
-            <p class="project-desc">Linux-style terminal wrapper with real-time weather, installable via pip.</p>
-            <div class="project-buttons">
-              <a href="#" class="btn-sm">View Github</a>
-              <a href="#" class="btn-sm">View Project</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- EDUCATION SECTION (from CV) -->
-    <section id="education" style="scroll-margin-top: 70px;">
-      <h2>Education</h2>
-      <div class="education-grid">
-        <div class="edu-card">
-          <div class="edu-degree">Bachelor of Technology - Computer Science</div>
-          <div class="edu-institution">Lovely Professional University, Phagwara</div>
-          <div class="edu-meta">Since August 2023 · CGPA 8.63</div>
-        </div>
-        <div class="edu-card">
-          <div class="edu-degree">Intermediate (Class XII)</div>
-          <div class="edu-institution">Army Public School, Ambala Cantt</div>
-          <div class="edu-meta">April 2021 - March 2023</div>
-          <div class="edu-score">Percentage: 92.3%</div>
-        </div>
-        <div class="edu-card">
-          <div class="edu-degree">Matriculation (Class X)</div>
-          <div class="edu-institution">Army Public School, Chandimandir Cantt</div>
-          <div class="edu-meta">April 2019 - March 2021</div>
-          <div class="edu-score">Percentage: 93.4%</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CERTIFICATES SECTION (from CV) -->
     <section id="certificates" style="scroll-margin-top: 70px;">
-      <h2>Certificates</h2>
+      <h2 class="reveal-item">Certificates</h2>
       <div class="cert-grid">
-        <div class="cert-card">
+        <div class="cert-card reveal-item">
           <div class="cert-title">Privacy and Security in Online Social Media</div>
           <div class="cert-meta">NPTEL · October 2025</div>
           <a href="https://drive.google.com/file/d/1AukaMYcaIryGNwr45PWzkBBOqC-dmE74/view" class="cert-link" target="_blank">View Certificate →</a>
         </div>
-        <div class="cert-card">
+        <div class="cert-card reveal-item">
           <div class="cert-title">Unrevealing Basic Python towards ML/AI</div>
           <div class="cert-meta">CSE Pathshala · 25 Hours Live · March 2024</div>
           <a href="https://drive.google.com/file/d/1pb9nZ-cZiSFTF8zZ_XX2ThNe9HP5FWjx/view" class="cert-link" target="_blank">View Certificate →</a>
@@ -782,24 +987,22 @@
       </div>
     </section>
 
-    <!-- ACHIEVEMENTS SECTION (from CV) -->
     <section id="achievements" style="scroll-margin-top: 70px;">
-      <h2>Achievements</h2>
+      <h2 class="reveal-item">Achievements</h2>
       <div class="achievement-list">
-        <div class="achievement-item">
+        <div class="achievement-item reveal-item">
           <p><strong>PicoCTF:</strong> Solved over 200+ CTF questions on this platform. (Since February 2025)</p>
           <a href="#" target="_blank">View profile →</a>
         </div>
-        <div class="achievement-item">
+        <div class="achievement-item reveal-item">
           <p><strong>24 Hours Hackathon:</strong> Participated in Hackverse 2024 organized by OASIS (March 2024)</p>
           <a href="https://drive.google.com/file/d/1FXoggKAoCwdD6lp3UZxhn6a8G11KflLp/view" target="_blank">View Certificate →</a>
         </div>
       </div>
     </section>
 
-    <!-- COMPACT CONTACT BOX (GitHub, LinkedIn, Email inside) -->
     <section id="contact" style="scroll-margin-top: 70px;">
-      <div class="contact-box">
+      <div class="contact-box reveal-item">
         <h3>Let's connect</h3>
         <div class="contact-links">
           <a href="https://github.com/HarmandeepSinghDhillon" target="_blank" class="contact-link">🐙 GitHub</a>
@@ -813,5 +1016,56 @@
       ✦ Designed with love, all right reserved for Harmandeep Singh ✦
     </footer>
   </div>
+
+  <script>
+    // 1. Intro Animation Logic
+    window.addEventListener('load', () => {
+      // Wait for the letters to slide up (about 1.6s total due to staggers)
+      setTimeout(() => {
+        // Fade out the text
+        document.querySelector('.intro-content').classList.add('fade-out');
+        
+        // Trigger the blocks falling down from left to right
+        const blocks = document.querySelectorAll('.intro-block');
+        blocks.forEach((block, index) => {
+          setTimeout(() => {
+            block.classList.add('slide-down');
+          }, index * 80); // Stagger the blocks by 80ms
+        });
+
+        // Clean up the DOM and allow scrolling once intro is fully out of view
+        setTimeout(() => {
+          document.body.classList.remove('no-scroll');
+          const introContainer = document.getElementById('intro-container');
+          if (introContainer) {
+            introContainer.style.display = 'none'; 
+          }
+        }, (blocks.length * 80) + 900); // Waits for all blocks to finish sliding
+
+      }, 1800); 
+    });
+
+    // 2. Permanent/Repeatable Scroll Observer
+    (function() {
+      const revealElements = document.querySelectorAll('.reveal-item');
+      if (revealElements.length === 0) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          } else {
+            // Removing the class when it leaves the screen makes it repeat
+            entry.target.classList.remove('revealed'); 
+          }
+        });
+      }, {
+        threshold: 0.1, // Triggers slightly earlier
+        rootMargin: '0px 0px -50px 0px' // Wait until it's slightly inside the viewport
+      });
+
+      revealElements.forEach(el => observer.observe(el));
+    })();
+  </script>
 </body>
 </html>
